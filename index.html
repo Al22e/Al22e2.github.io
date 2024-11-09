@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estilo Retro Japonés</title>
+    <style>
+        /* Fondo con filtro sepia, iluminación oscura y filtro antiguo */
+        body {
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+            background: url('descargar_(1)-yXyX3j5xN-transformed.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            filter: sepia(0.8) contrast(1.1) brightness(0.9) saturate(0.7); /* Filtro de aspecto antiguo */
+        }
+
+        /* Capa de difuminado sobre la imagen de fondo */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: inherit;
+            filter: blur(3px); /* Difuminado sobre la capa de fondo */
+            z-index: 0;
+        }
+
+        /* Efecto de viñeta más fuerte para los bordes */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+        }
+
+        /* Botón de reproducción de música con animación de movimiento */
+        #play-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: url('descargar__1_-removebg-preview.png') no-repeat center center;
+            background-size: contain;
+            border: none;
+            cursor: pointer;
+            z-index: 5;
+            animation: float 3s ease-in-out infinite; /* Animación de movimiento */
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Texto japonés en rojo mate */
+        .kanji {
+            position: fixed;
+            color: rgba(150, 0, 0, 0.9); /* Rojo mate */
+            font-size: 24px;
+            font-family: 'Arial', sans-serif;
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            opacity: 0.9;
+            transform: rotate(2deg);
+            z-index: 2;
+        }
+
+        /* Efecto de brillos mejorados */
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 1), rgba(255, 215, 0, 0.6), rgba(255, 215, 0, 0));
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle-fall 1.5s ease-out forwards;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Animación de caída de los brillos */
+        @keyframes sparkle-fall {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(30px) scale(0.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<button id="play-button"></button> <!-- Botón de reproducción en esquina superior derecha -->
+
+<script>
+    // Configuración de audio
+    let audioElement = new Audio('Musica.mp3'); // Reemplaza con la URL de tu archivo de música
+    let playButton = document.getElementById('play-button');
+    let isPlaying = false;
+
+    // Alternar reproducción y pausa
+    playButton.addEventListener('click', () => {
+        if (isPlaying) {
+            audioElement.pause();
+        } else {
+            audioElement.play();
+        }
+        isPlaying = !isPlaying;
+    });
+
+    // Lista de frases en japonés
+    const japanesePhrases = [
+        '愛してる', 'あなたは大切です', '好きです', 'あなたが恋しい', 
+        '抱きしめたい', 'そばにいて欲しい', 'ずっと一緒にいたい', 'あなたは美しい', 
+        '君の瞳が好き', '君の笑顔が大好き', 'ずっとキスしたい', '君の全てが好き'
+    ];
+
+    // Posiciones cercanas al borde, sin salirse
+    const positions = [
+        {left: '5vw', top: '10vh'}, {left: '15vw', top: '25vh'}, 
+        {left: '25vw', top: '40vh'}, {left: '35vw', top: '60vh'}, 
+        {left: '45vw', top: '15vh'}, {left: '55vw', top: '30vh'}, 
+        {left: '65vw', top: '45vh'}, {left: '75vw', top: '65vh'}, 
+        {left: '10vw', top: '70vh'}, {left: '20vw', top: '20vh'}, 
+        {left: '70vw', top: '25vh'}, {left: '80vw', top: '50vh'}
+    ];
+
+    // Generar frases japonesas en posiciones fijas
+    function generateKanji() {
+        for (let i = 0; i < japanesePhrases.length; i++) { 
+            let kanji = document.createElement('div');
+            kanji.classList.add('kanji');
+            kanji.innerText = japanesePhrases[i];
+            kanji.style.left = positions[i].left;
+            kanji.style.top = positions[i].top;
+            document.body.appendChild(kanji);
+        }
+    }
+
+    generateKanji(); // Llama a la función para generar el texto en japonés
+
+    // Crear efecto de brillos al mover el ratón
+    document.addEventListener('mousemove', (e) => {
+        for (let i = 0; i < 5; i++) { // Crear múltiples brillos en cada movimiento
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.left = `${e.pageX + (Math.random() - 0.5) * 20}px`;
+            sparkle.style.top = `${e.pageY + (Math.random() - 0.5) * 20}px`;
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => sparkle.remove(), 1500); // Eliminar el brillo después de 1.5 segundos
+        }
+    });
+</script>
+
+</body>
+</html>
